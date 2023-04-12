@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//datasource db {
+  //provider = "postgresql"
+  //url      = env("DATABASE_URL")
+//}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Book {
+  id      Int      @id @default(autoincrement())
+  bookName String
+  author String
+  chapters Chapter[]
+}
+
+model Chapter {
+  id      Int      @id @default(autoincrement())
+  chapterTitle String
+  chapterNum Int
+  book Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId Int
+  exercises Exercise[]
+}
+
+model Exercise {
+  id      Int      @id @default(autoincrement())
+  exerciseNum Int
+  done Boolean @default(false)
+  star Boolean @default(false)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId Int
+}
